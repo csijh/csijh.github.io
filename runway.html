@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
+<head>
+<meta charset="UTF-8"/>
+<title>OOP with Java</title>
+<link href="wrap/style.css" rel="stylesheet" type="text/css" />
+<link href="wrap/xcode.min.css" rel="stylesheet" />
+<script src="wrap/highlight.min.js"></script>
+<script src="wrap/java.min.js"></script>
+<script src='wrap/wrap.js'></script>
+<script src='splatter.js'></script>
+<script src='reveal.js'></script>
+<style>
+  .hidden { display:none; }
+  .red { color: red; }
+  u { text-decoration-color: red; text-decoration-style: double; }
+</style>
+</head>
+<body data-lang="java">
+
+<template>
+  <div class='icon'>
+  </div>
+  <div class='navigation'>
+    <a class="jump back" href="">&lt; </a>
+    <span class="here">1</span>
+    <a class="jump next" href=""> &gt;</a>
+  </div>
+</template>
+
+<section>
+<h1 class="title">The Runway Language<br/>
+<span style="font-size:70%">where your programs take off<br/>
+Ian Holyer</span></h1>
+<p class="middle"><a href="/software/runway/"></a></p>
+</section>
+
+<section data-animate="splatter">
+<h2>History of languages</h2>
+<pre class="hidden splatter">Fortran Lisp Algol Cobol APL Simula Snobol CPL
+Algol68 Mimic Trac MAD/I Pop PL/I Basic Coral APL BCPL Mumps InterLisp XPL Forth
+Logo Mapper Pilot B PPL IMP SETL Tutor Pascal BLISS KRL Smalltalk PL/M C
+INTERCAL Prolog Comal ML Lis CLU Grass ABC Scheme Modula Plus Mesa Ratfor S FP
+Icon Euclid Matlab SMALL VisiCalc Awk Ada CBASIC Draco
+Turing Objective-C C++ Occam Clascal Common-Lisp RPL OPL Paradox Clarion Eiffel
+Miranda PROMAL Erlang Self Hypertalk Perl Oberon Turbo-Basic
+Clean Octave Tcl SPARK A+ Magik J Haskell Python Oz Q Visual-Basic Dylan K Lua
+R Euphoria Claire Pike Java LiveScript Mercury PHP Ruby JavaScript Racket Curl
+VBScript OCaml E Pico Squeak ECMAScript ActionScript
+F-Script Tea Rebol UnrealScript Join-Java XL C# Joy AspectJ D GDScript Io
+Scratch Nemerle Factor Falcon Scala Squirrel HolyC Boo
+FreeBasic Groovy Fantom F# Haxe Oxegene Links Cobra Optimj Fortress Vala Agda
+Clojure Nim Genie Pure Chapel Go
+CoffeeScript Idris Parasail Whiley Rust Ceylon Kotlin Red Opa Elixir Elm
+Dart Elm TypeScript Julia Crystal Hack Swift Ring
+</pre>
+</section>
+
+<section>
+<h2>Aim</h2>
+<p>* Concentrate on one family of languages, the OO ones</p>
+<p>* Change one feature which is overdue for an upgrade</p>
+<p>* Explore the consequences</p>
+<p>Sources of ideas: <a class="jump" href="#Haskell">Haskell</a>,
+<a class="jump" href="#concurrency">concurrency</a>,
+<a class="jump" href="#teaching">teaching</a>,
+<a class="jump" href="#patterns">design patterns</a>,
+<a class="jump" href="#harmful">... considered harmful</a>
+</p>
+<p>OO languages <em>in principle</em> allow you to build complex programs from
+small, robust, bullet-proof components</p>
+</section>
+
+<aside id="Haskell">
+<h2>Haskell</h2>
+<p>One of the important contributions of Haskell to the wider world is that
+ideas from it spread out into other languages</p>
+<p>An early question was "what is the next idea that should make it across the
+gap"</p>
+<p>This followed on from previous research in the Haskell area</p>
+</aside>
+
+<aside id="concurrency">
+<h2>Concurrency</h2>
+<p>Current approaches to concurrency in most languages seem (arguably) to
+border on the diabolical</p>
+<p>Some previous research on <dfn>deterministic concurrency</dfn> in functional
+languages seemed worth pursuing in other languages</p>
+</aside>
+
+<aside id="teaching">
+<h2>Teaching</h2>
+<p>In my experience of teaching Java, it has a lot of strange details, but they
+are mostly easy to explain</p>
+<p>But the need for, and the self-control required, to create truly robust
+components (arguably the essence of OO) is unreasonably difficult to instill</p>
+</aside>
+
+<aside id="patterns">
+<h2>Design patterns</h2>
+<p>Design patterns are usually described as solutions to common OO problems</p>
+<p>But another point of view is that they represent weaknesses in current OO
+languages which require trickery to circumvent</p>
+<p>The idioms they present should instead be natural</p>
+</aside>
+
+<aside id="patterns">
+<h2>... considered harmful</h2>
+<p>Try looking up:</p>
+<ul>
+    <li>pointers considered harmful</li>
+    <li>static considered harmful</li>
+    <li>constructors considered harmful</li>
+    <li>new considered harmful</li>
+    <li>inheritance considered harmful</li>
+    <li>...</li>
+</ul>
+<p>A lot of useful ideas emerge</p>
+</aside>
+
+<section style="position:relative;" data-animate="reveal">
+<h2>Example</h2>
+<p>Here's a Java class that a student might write:</p>
+<pre>class Grid {
+
+        char[][] cells;
+
+        Grid(char[][] c) { cells = c; }
+
+        char[][] getCells() { return cells; }
+
+}
+</pre>
+<p style="position:absolute;top:220px"><img src="arrow.png"/></p>
+<p style="position:absolute;top:290px"><img src="arrow.png"/></p>
+<p style="position:absolute;top:360px"><img src="arrow.png"/></p>
+</section>
+
+<section style="position:relative;">
+<h2>Fixing the Example</h2>
+<p>A Java class can be <em>made</em> robust:</p>
+<pre>class Grid {
+
+        <u>private</u> char[][] cells;
+
+        Grid(char[][] c) { cells = <u>copy</u>(c); }
+
+        char[][] getCells() { return <u>copy</u>(cells); }
+
+}
+</pre>
+</section>
+
+<section>
+<h2>A big shock</h2>
+<p>A little while after learning Java, I got a big shock</p>
+<p>It isn't just student classes that are fragile:</p>
+<p><strong>You can break Java library classes</strong></p>
+</section>
+
+<section>
+<h2>Breaking a hash table</h2>
+<pre class="java">Set&lt;Item> set = new HashSet&lt;>();
+set.add(item);
+item.update();
+</pre>
+<p></p>
+<p>The hash code changed, the item is in the wrong slot</p>
+<p>It is now a <em>quantum</em> hash table - the item is both in and not in the
+set - i.e. it is <em>broken</em></p>
+<p>This is very unlikely to happen, if it does, it is not just a bug, it is a
+cockroach</p>
+</section>
+
+<section>
+<h2>Psychology</h2>
+<p>All languages are "the same", because they are all Turing Complete</p>
+<p>But they differ in their psychological effect on program design and
+development</p>
+<p>Arguably, Java has a <b>bad</b> psychological effect</p>
+<p>It encourages a lack of robustness</p>
+</section>
+
+<section>
+<h2>The problem: aliasing</h2>
+<p>An update via one pointer is visible via the other</p>
+<img class="middle" src="alias.png" />
+</section>
+
+<section>
+<h2><em>Feature:</em> anti-aliasing</h2>
+<p>In Runway, an assignment makes a copy</p>
+<pre>1  point p.set(1,2);
+2  point q = p;
+3  p.set(3,4);
+4  assert(q.x == 1 &amp;&amp; q.y == 2);
+</pre>
+<p>The copying is lazy, on line 2 <code>q</code> points to the same object as
+<code>p</code></p>
+<p>After line 2, <code>q</code> points to the same object as <code>p</code></p>
+<p>Copying happens on line 3 because <code>p</code> is "shared"</p>
+</section>
+
+<section>
+<h2>Techniques</h2>
+<p>Lots of systems out there use related techniques - it is a ripe idea (C, C++,
+Rust, Swift, Immutable.js, ...) :</p>
+<ul>
+<li>immutability</li>
+<li>ownership</li>
+<li>copy semantics</li>
+<li>lazy copying</li>
+<li>copy on write</li>
+<li>persistent data structures</li>
+</ul>
+<p>Runway just takes the idea to its logical conclusion</p>
+</section>
+
+<section>
+<h2><em>So:</em> no pointers</h2>
+<p>Java has no pointer <strong>notation</strong>, but you have to understand
+pointers properly to use Java well</p>
+<p>Runway has no pointers in its <strong>mental model</strong> =
+<strong>semantics</strong></p>
+<p>Pointers are just an implementation technique, used to cope with
+<em>variable sizes</em> or to <em>save memory</em></p>
+</section>
+
+<section>
+<h2><em>So:</em> no null</h2>
+<p>Languages have <code>null</code> as an <em>accident</em> of the pointer
+notation</p>
+<p>The most common uses are as empty structures or cheap exceptions</p>
+<p>A null structure is justified in procedural languages, but not in OO
+languages</p>
+<p>So Runway has tagged unions and cheap exceptions</p>
+<p>Notes:
+<a class="jump" href="#unions">unions</a>,
+<a class="jump" href="#exceptions">exceptions</a>
+</p>
+</section>
+
+<aside id="unions">
+<h2>Unions</h2>
+<p>How should an empty list or tree be represented?</p>
+<p>Null isn't available, and an exceptional value isn't OO, because you can't
+ask questions such as "are you empty?"</p>
+<p>Inheritance with an empty structure as a separate type works but seems too
+heavy</p>
+<p>The best bet seems to be a 'tagged union' - a notation which makes it nearly
+as convenient as an algebraic type in Haskell would be good</p>
+</aside>
+
+<aside id="exceptions">
+<h2>Exceptions</h2>
+<p>The plan is: a method can return an exception value</p>
+<p>Exceptions mix with any other type</p>
+<p>That makes exception behaviour easily testable</p>
+<p>An exception return value not explicitly handled by the end of its block
+becomes an error and is thrown</p>
+<p>The compiler tells you if any errors are uncaught</p>
+</aside>
+
+<section>
+<h2><em>So:</em> no identity</h2>
+<p>Some say that 'object identity' is an essential aspect of
+OO, but it is just an accident of pointers</p>
+<p>Runway doesn't have it: identity comes from a contained id or by associating
+it with a key in a lookup structure</p>
+<p>So Runway has <em>value</em> equality (hooray!)<br/>
+(and perhaps <a class="jump" href="#keys">key equality</a>)</p>
+</section>
+
+<aside id="keys">
+<h2>Key equality</h2>
+<p>Key equality works by declaring that certain fields in an object form a
+key</p>
+<p>This has the advantages that equality and comparison and hashcodes
+are automatic, have the right properties, are consistent with each other, and
+cover most cases of equality that programmers want</p>
+<p>This needs to be in addition to value equality (and possibly
+allowing for alternative keys)</p>
+</aside>
+
+<section>
+<h2><em>So:</em> primitives</h2>
+<p>In Java, objects and primitives are <strong>different</strong></p>
+<p>In many languages, they are made the same by making primitives act like
+objects ("boxing")</p>
+<p>In Runway, they are made the same by making objects act like primitives</p>
+</section>
+
+<section>
+<h2><em>So:</em> no cycles</h2>
+<p>Pointing to <code>o</code> is the same as containing <code>o</code></p>
+<p>An object pointing to itself means containing itself</p>
+<p>So it would be infinite</p>
+<p>The lack of cycles has drastic consequences for program design and data
+structures, but they are well understood</p>
+</section>
+
+<section>
+<h2><em>So:</em> no statics</h2>
+<p>A consequence of anti-aliasing is that static variables are out,
+because they have uncontrolled pointer aliasing:</p>
+<img class="middle" src="static.png"/>
+<p>Runway needs a different approach to global variables</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> anti-static</h2>
+<p><em>Question:</em> What would you do without globals?</p>
+<p><em>Answer:</em> you would pass objects down in calls</p>
+<img class="middle" src="global.png"/>
+<p><em>Definition:</em> making an object global is an abbreviation for passing
+it to all the descendants of its owner</p>
+<p>Notes:
+<a class="jump" href="#scope">scope</a>,
+<a class="jump" href="#singletons">singletons</a>,
+<a class="jump" href="#escape">escape</a>
+</p>
+</section>
+
+<aside id="scope">
+<h2>Scope of globals</h2>
+<p>The scope of a Runway global is all the descendants of its owner</p>
+<p>That's a dynamic and relative scope</p>
+<p>For static checking, perhaps an owner has a declaration "provide
+<code>g</code> to
+all descendants" and anything that uses <code>g</code> has a declaration
+"require <code>g</code> from an ancestor"</p>
+</aside>
+
+<aside id="singletons">
+<h2>Singletons</h2>
+<p>A global can <strong>always</strong> be overridden with something else, so
+there is no such thing as a program-wide singleton</p>
+<p>From the Runway point of view, the singleton design pattern is misguided</p>
+<p>Singletons are known to be bad for testing and flexibility anyway</p>
+</aside>
+
+<aside id="escape">
+<h2>Escape</h2>
+<p>It would seem sensible to allow a grandparent which provides a global, a
+parent which is an ordinary list object, say, which knows nothing about the
+global, and an item inside the list which accesses the global</p>
+<p>But then it would also seem sensible to have a compile-time restriction
+(based on escape analysis?) which prevents an item which uses a global from
+being implicitly passed out of the scope of the global</p>
+</aside>
+
+<section>
+<h2><em>So:</em> no constructors</h2>
+<p>A constructor is static (because there isn't yet an object to call a method
+on)</p>
+<p>So Runway can't have conventional constructors</p>
+<p>But that's OK because conventional constructors and the <code>new</code>
+keyword are 'considered harmful'</p>
+<p>Constructors can't be inherited, and the phrase <code>new Thing()</code>
+exposes some implementation details, preventing you from giving a recycled or
+shared object, or a subclassed object (hence factory patterns)</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> anti-new</h2>
+<pre>point p;       // create p as a copy of a default
+p.set(1,2);    // initialize its fields
+</pre>
+<p>When you declare a variable, it is initialized to a (lazy copy of a) default
+object</p>
+<p>That object has uninitialized fields, so it can't be used until they are
+initialized</p>
+<p><code>set</code> is an ordinary method, but with the <dfn>property</dfn> of
+being a constructor</p>
+</section>
+
+<section>
+<h2>Comparison</h2>
+<p>Here are some ways of creating a point:</p>
+<pre>point p = new point(3, 4);      // Java
+var p = new point(3, 4);        // JavaScript
+var p = point(3, 4);            // Swift
+point p.set(3, 4);              // Runway
+</pre>
+<p>Runway's version is syntactically shortest</p>
+<p>More importantly, it is semantically simplest</p>
+</section>
+
+<section>
+<h2>Class = type = object</h2>
+<pre data-name="point.rw">
+int x, y;
+
+set(x0, y0) { x = x0; y = y0; }
+
+x() { return x; }
+y() { return y; }
+</pre>
+<p>Is it a class? Is it a prototype? It's an object</p>
+<p>Notes:
+<a class="jump" href="#name">names</a>,
+<a class="jump" href="#private">private</a>,
+<a class="jump" href="#singleton">singletons</a>,
+<a class="jump" href="#infer">inference</a></p>
+</section>
+
+<aside id="name">
+<h2>No class name</h2>
+<p>Java starts with <code>class X</code>, but that must match the filename
+<code>X.java</code> so it is redundant</p>
+<p>So in Runway, file <code>point.rw</code> defines an object called
+<code>point</code></p>
+<p>Techinically, <code>point</code> is a variable which is global to the
+directory it is in, so available to all files in the directory</p>
+</aside>
+
+<aside id="private">
+<h2>Private fields</h2>
+<p>For robustness, fields in Runway objects are always private</p>
+<p><em>But</em> when testing rather than running a program, it is helpful to be
+able to inspect field values</p>
+<p><em>And</em> the notation <code>o.x</code> is redundant and free to be
+reused to mean <code>o.x()</code> for getter <code>x()</code>, and
+<code>o.x = y</code> could mean <code>o.x(y)</code> for setter
+<code>x(_)</code></p>
+</aside>
+
+<aside id="singleton">
+<h2>Singletons</h2>
+<p>An object like <code>point</code> can directly be used as a singleton
+instead of as a type</p>
+<p>But the design-pattern version of singletons, where a global variable is
+rigidly irreplaceable across a whole program is (it is easy to argue) just
+wrong</p>
+<p>A singleton is a potentially replaceable or duplicatable global variable</p>
+</aside>
+
+<aside id="infer">
+<h2>Type inference</h2>
+<p>It seems reasonable to have type inference, where it is easy</p>
+<p>Exactly how far to take this in the language is unclear at present</p>
+<p>Perhaps as far as Swift's type inference</p>
+</aside>
+
+<section>
+<h2><em>Feature:</em> call by copy</h2>
+<pre data-name="grid.rw">...
+window.display(cells);
+...
+</pre>
+<p>The 'default' calling mechanism is <dfn>call-by-copy</dfn>
+(i.e. call-by-value in the deep functional-programming/formal-semantics sense,
+not the usual shallow OO sense)</p>
+<p>So even if the <code>window</code> object is untrusted and updates the
+argument, the <code>grid</code> object remains robust</p>
+<p>However <em>delegation</em>, where you trust the software you build on, is
+an important OO principle (for DRYness)</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> call by lend</h2>
+<pre data-name="program.rw">...
+sorter.sort(&amp;xs);
+...
+</pre>
+<p>The <code>&amp;</code> means the method can update or
+replace <code>xs</code></p>
+<p>This is call-by-reference with a twist: the choice is made in the
+call, not in the method signature</p>
+<pre>o.f(&amp;x)     -->     f(o, &amp;x);
+o.f(x)      -->     temp = x; f(o, &amp;temp);
+</pre>
+<p>
+<a class="jump" href="#swap">swap</a>,
+<a class="jump" href="#sort">sort</a>,
+<a class="jump" href="#call">calls</a>,
+<a class="jump" href="#dot">dots</a>,
+<a class="jump" href="#this">this</a>,
+<a class="jump" href="#self">self</a>
+</p>
+</section>
+
+<aside id="swap">
+<h2>Swapping</h2>
+<p>This works</p>
+<pre>swap(a,b) {
+    t = a;
+    a = b;
+    b = t;
+}
+...
+swap(&amp;x, &amp;y);
+</pre>
+</aside>
+
+<aside id="sort">
+<h2>Sorting</h2>
+<p>This doesn't work</p>
+<pre>...
+swap(&amp;a[i], &amp;a[j]);
+</pre>
+<p>If allowed, it would swap two temporary variables, not the array contents, but
+instead the compiler complains that you can't pass a non-variable expression by
+reference, so <code>swap(a, i, j)</code> is needed</p>
+</aside>
+
+<aside id="call">
+<h2>Implementation of calls</h2>
+<p>All arguments that may involve updating are passed by reference</p>
+<p>A call <code>f(x)</code> is translated if necessary to
+<code>t = x; f(t)</code> which creates an extra reference so that a copy is made,
+then any update or replacement or copy is done to <code>t</code> which is
+then discarded</p>
+</aside>
+
+<aside id="dot">
+<h2>The dot notation</h2>
+<p>In OO, it is normal to write <code>x.f(y)</code>, thinking of method
+<code>f</code> as attached to <code>x</code></p>
+<p>In C notation, it is really <code>f(x,y)</code>, but with <code>f</code>
+overloaded</p>
+<p>In Runway, <code>x.f(y)</code> is equivalent to <code>f(&amp;x,y)</code>, so
+<code>x</code> is expected to update itself as it wishes</p>
+</aside>
+
+<aside id="this">
+<h2>Updating <code>this</code></h2>
+<p>A method call <code>obj.f(x)</code> is equivalent to a function call
+(in C, say) <code>f(obj, x)</code></p>
+<p>It is reasonable to assume that the 'special' first argument is always an
+update argument, because if you don't trust the object, you are going to tell
+it things, but not ask it things, so it is OK for it to update itself</p>
+</aside>
+
+<aside id="self">
+<h2><em>Feature:</em> self replacement</h2>
+<p>Suppose you update a Runway object</p>
+<pre>p.set(3,4);
+</pre>
+<p>If <code>p</code> is shared, it must be replaced by a copy</p>
+<p>That gives you a language feature for free: the ability of an object
+to replace itself</p>
+<p>Delegation is an important OO principle, and now an object which you delegate
+to can do anything you can</p>
+</aside>
+
+<section>
+<h2><em>Feature:</em> higher order calls</h2>
+<p>Runway will allow functions to be passed, <em>but</em> a function is always
+attached to an object as a method</p>
+<p>The object is its closure (closures should <em>not</em> be a separate
+concept, as in JavaScript)</p>
+<p>A function is passed as an object with a marked method (maybe explicitly like
+Java's <code>...(x::f)</code>)</p>
+<p>There is syntactic, semantic and implementation work to do here
+(<a class="jump" href="#aliases">aliases</a>,
+<a class="jump" href="#dispatch">dispatch</a>)</p>
+</section>
+
+<aside id="aliases">
+<h2>No aliasing</h2>
+<pre class="java">update(x, y) {
+    x = x + 1;
+    y = y * 2;
+}
+...
+update(&amp;z, &amp;z);
+</pre>
+<p>This can't be allowed, because there is no sensible possible final value for
+<code>z</code> (if <code>z</code> is <code>2</code>, <code>x=3</code> and
+<code>y=4</code>)</p>
+<p>Fortunately, this only arises if the same explicit variable name is
+used, so it shouldn't be an obscure issue</p>
+<p>A call <code>x.f(this)</code> is also very dubious</p>
+</aside>
+
+<aside id="dispatch">
+<h2><em>Feature:</em> multiple dispatch</h2>
+<p>Runway gets rid of the nonsense of the visitor design pattern by providing
+double, triple, ... dispatch</p>
+<p>The visitor pattern looks good, then turns out to be very obscure, and anyway
+<em>it doesn't fully solve the problem you are trying to solve</em> (i.e. easy
+addition of one class in either of two families)</p>
+<p>Multiple dispatch is easy to implement, and as efficient as any of the
+alternatives</p>
+</aside>
+
+<section>
+<h2>Inheritance</h2>
+<p>Arguably, there are two kinds of inheritance:</p>
+<ul>
+<li>a <dfn>subtype</dfn> makes the same semantic promise</li>
+<li>an <dfn>interface</dfn> requires only the same API</li>
+</ul>
+<p>Java's <code>extends</code> inheritance is interface inheritance plus
+code/field reuse, and is considered harmful</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> subtypes</h2>
+<pre class="java">vehicle car;
+car.set(...);
+car c;
+</pre>
+<p>Runway gives an absolute promise: <strong>c is a vehicle</strong></p>
+<pre class="java">statement theorem;
+theorem.restrict();
+theorem t.set(s, p);
+</pre>
+<p>Maybe you could add methods, but not override them, or gain access to the
+private fields</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> properties</h2>
+<p>Runway has a notation for declaring <em>properties</em>, e.g.</p>
+<pre data-name="point.rw">
+constructor: set
+getter: x, y
+
+int x, y
+
+set(x0, y0) { x = x0; y = y0; }
+</pre>
+<p>For <code>constructor</code>, the compiler can check</p>
+<p>For <code>getter</code>, it can also generate boiler-plate code</p>
+<p>Features are <strong>necessary</strong> for robustness</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> delegation</h2>
+<pre class="java" data-name="window.rw">delegate to r: width, height, area
+...
+rectangle r;
+</pre>
+<p>This is composition ('has-a') inheritance, close to subtype inheritance</p>
+<p>(Possible optimisation in the implementation: extends)</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> interfaces</h2>
+<pre class="java" data-name="car.rw">like vehicle: car
+...
+wheels() { return 4; }
+</pre>
+<p>Java problem: can't retro-fit interfaces in libraries</p>
+<p>In Runway, any type can be used as an interface</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> reusability</h2>
+<pre class="java" data-name="rect.rw">area() { return width() * height(); }
+</pre>
+<p>The <em>area</em> method is reusable in any type that has
+<code>width()</code> and <code>height()</code></p>
+<pre class="java" data-name="window.rw">like rectangle: window
+reuse: area
+...
+</pre>
+</section>
+
+<section>
+<h2>Safe hash tables</h2>
+<pre class="java" data-name="record.rw">getter: key;
+...
+</pre>
+<pre class="java" data-name="table.rw">type parameter: R
+like record: R
+new(R) { ... }
+...
+</pre>
+<p>For a safe hash table, as well as anti-aliasing, the <code>key</code>
+method in the <code>R</code> type must be a getter, i.e.
+not cause an update to the record or read from a global variable</p>
+<p>In Runway, properties are inherited as well as APIs</p>
+</section>
+
+<section>
+<h2>Memory shared threads</h2>
+<p>Memory sharing concurrency is diabolical:</p>
+<p>The standards for C and Java define a 'lowest common denominator' of hardware
+support and are incredibly complex and obscure</p>
+<p>The Java library sources have thread issues in nearly every class; that's
+<em>not</em> orthogonal or encapsulated</p>
+<p><em>non-determinism, deadlock, livelock, starvation, ...</em></p>
+</section>
+
+<section>
+<h2>Message passing threads</h2>
+<p>Message passing provides a language in which to be explicit about and reason
+about concurrency problems</p>
+<p>But <em>it doesn't solve any of them</em></p>
+<p>Arguably, a classic case of building a substantial theory around a broken
+idea</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> threads</h2>
+<p>An object can introduce a new thread</p>
+<p>The thread 'owns' the object and all the data below it</p>
+<p>Method calls on the object look normal, so the new thread is
+an annotation</p>
+<p>Access to the result or an updated argument by the parent thread causes
+a synchronizing pause</p>
+<p>This is message-passing concurrency</p>
+</section>
+
+<section>
+<h2>Determinism</h2>
+<p>The intention is that the program <em>with</em> the thread annotation
+has identical functionality to the program <em>without</em> it</p>
+<p>So, the concurrency can <em>only</em> be used for latency hiding</p>
+<p>But that's enough for many purposes, including servers and graphics (graphics
+libraries always used to be threaded, but they have typically moved to the
+callback style, which is fairly diabolical)</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> events</h2>
+<p>Communications are handled via a very old concept: the single
+input stream of events</p>
+<p><em>All</em> events are in the stream, and the ordering is critical - it
+defines their relative timings</p>
+<p>That means auto-dispatch to the right place is either banned or implemented
+with extreme care</p>
+<p>So: still deterministic</p>
+</section>
+
+<section>
+<h2><em>Feature:</em> injection</h2>
+<p>Non-determinism is handled by adding one feature:</p>
+<p>The program can inject an event into the stream (at a time-dependent
+position)</p>
+<p>You can <dfn>replay</dfn> a program from a <dfn>recorded</dfn> event stream</p>
+<p>Then you can debug and (regression) test programs!</p>
+</section>
+
+<section>
+<h2>Thought experiments</h2>
+<p>Understanding of the system at the moment is based around thought experiments
+of possible programs:</p>
+<ul>
+<li>operating system</li>
+<li>splat the rat</li>
+<li>server</li>
+<li>graphics library</li>
+</ul>
+</section>
+
+<section>
+<h2>Operating system</h2>
+<p>A program <code>OS</code> runs two other programs <code>A</code> and
+<code>B</code> as modules, not as separate processes</p>
+<p>It needs <code>A</code> and <code>B</code> to run in their own threads</p>
+<p>It needs to set up a 'fake' system environment of global
+variables and devices etc. separately for <code>A</code> and <code>B</code></p>
+<p>And it needs to unzip the event stream into two event streams</p>
+</section>
+
+<section>
+<h2>Splat the rat</h2>
+<p>Think of an X-Window style system:</p>
+<img class="middle" src="gui.png"/>
+<p>The program sends a "hide rat" graphics request and asks for an
+acknowledgement to be injected into the event stream</p>
+<p>The player wins if the click event comes before the acknowledgement</p>
+</section>
+
+<section>
+<h2>Server</h2>
+<p>An update request, in its own thread, updates a copy of the database,
+and ends by injecting a 'new database version' event into the queue</p>
+<p>Read requests after the injection see the new version</p>
+<p>The update requests would have to be serialized</p>
+<p>Or the database can be split into independent pieces to allow concurrent
+updating (like locking)</p>
+<p>Or the updates could be merged, with retries (like speculative
+versioning)</p>
+</section>
+
+<section>
+<h2>Graphics library</h2>
+<p>There is much work to be done here, but there is a prospect of a
+<em>much</em> more sensible system than usual</p>
+<p>Semantically sensible latency hiding may depend on splitting a window into
+independent subwindows which can be drawn on concurrently without
+interference</p>
+<p>&#160;</p>
+<p style="text-align:center;font-size:140%;font-weight:bold;">csijh.github.io</p>
+</section>
+
+</body>
+</html>
