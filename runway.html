@@ -61,14 +61,14 @@ Dart Elm TypeScript Julia Crystal Hack Swift Ring
 <p>* Concentrate on one family of languages, the OO ones</p>
 <p>* Change one feature which is overdue for an upgrade</p>
 <p>* Explore the consequences</p>
+<p>OO languages <em>in principle</em> allow you to build complex
+programs from small, robust, bullet-proof components</p>
 <p>Sources of ideas: <a class="jump" href="#Haskell">Haskell</a>,
 <a class="jump" href="#concurrency">concurrency</a>,
 <a class="jump" href="#teaching">teaching</a>,
 <a class="jump" href="#patterns">design patterns</a>,
 <a class="jump" href="#harmful">... considered harmful</a>
 </p>
-<p>OO languages <em>in principle</em> allow you to build complex programs from
-small, robust, bullet-proof components</p>
 </section>
 
 <aside id="Haskell">
@@ -179,6 +179,8 @@ cockroach</p>
 development</p>
 <p>Arguably, Java has a <b>bad</b> psychological effect</p>
 <p>It encourages a lack of robustness</p>
+<p>The same (probably) applies to every other popular or potentially popular
+OO language</p>
 </section>
 
 <section>
@@ -192,19 +194,19 @@ development</p>
 <p>In Runway, an assignment makes a copy</p>
 <pre>1  point p.set(1,2);
 2  point q = p;
-3  p.set(3,4);
-4  assert(q.x == 1 &amp;&amp; q.y == 2);
+3  q.set(3,4);
+4  assert(p.x == 1 &amp;&amp; p.y == 2);
 </pre>
-<p>The copying is lazy, on line 2 <code>q</code> points to the same object as
+<p>The copying is lazy</p>
+<p>On line 2, <code>q</code> points to the same object as
 <code>p</code></p>
-<p>After line 2, <code>q</code> points to the same object as <code>p</code></p>
 <p>Copying happens on line 3 because <code>p</code> is "shared"</p>
 </section>
 
 <section>
 <h2>Techniques</h2>
-<p>Lots of systems out there use related techniques - it is a ripe idea (C, C++,
-Rust, Swift, Immutable.js, ...) :</p>
+<p>Lots of languages and libraries use related techniques - it is a ripe idea
+(C, C++, Rust, Swift, Immutable.js, ...) :</p>
 <ul>
 <li>immutability</li>
 <li>ownership</li>
@@ -353,7 +355,7 @@ being implicitly passed out of the scope of the global</p>
 <h2><em>So:</em> no constructors</h2>
 <p>A constructor is static (because there isn't yet an object to call a method
 on)</p>
-<p>So Runway can't have conventional constructors</p>
+<p>So Runway doesn't have conventional constructors</p>
 <p>But that's OK because conventional constructors and the <code>new</code>
 keyword are 'considered harmful'</p>
 <p>Constructors can't be inherited, and the phrase <code>new Thing()</code>
@@ -466,9 +468,9 @@ sorter.sort(&amp;xs);
 <p>The <code>&amp;</code> means the method can update or
 replace <code>xs</code></p>
 <p>This is call-by-reference with a twist: the choice is made in the
-call, not in the method signature</p>
-<pre>o.f(&amp;x)     -->     f(o, &amp;x);
-o.f(x)      -->     temp = x; f(o, &amp;temp);
+call, not in the method signature, e.g. if all calls are implemented by
+reference:</p>
+<pre>o.f(x)      -->     temp = x; o.f(&amp;x);
 </pre>
 <p>
 <a class="jump" href="#swap">swap</a>,
@@ -624,7 +626,7 @@ set(x0, y0) { x = x0; y = y0; }
 </pre>
 <p>For <code>constructor</code>, the compiler can check</p>
 <p>For <code>getter</code>, it can also generate boiler-plate code</p>
-<p>Features are <strong>necessary</strong> for robustness</p>
+<p>Properties are <strong>necessary</strong> for robustness</p>
 </section>
 
 <section>
