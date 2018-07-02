@@ -470,7 +470,7 @@ replace <code>xs</code></p>
 <p>This is call-by-reference with a twist: the choice is made in the
 call, not in the method signature, e.g. if all calls are implemented by
 reference:</p>
-<pre>o.f(x)      -->     temp = x; o.f(&amp;x);
+<pre>o.f(x)      -->     temp = x; o.f(&amp;temp);
 </pre>
 <p>
 <a class="jump" href="#swap">swap</a>,
