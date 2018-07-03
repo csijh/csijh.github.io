@@ -200,7 +200,7 @@ OO language</p>
 <p>The copying is lazy</p>
 <p>On line 2, <code>q</code> points to the same object as
 <code>p</code></p>
-<p>Copying happens on line 3 because <code>p</code> is "shared"</p>
+<p>Copying happens on line 3 because <code>q</code> is "shared"</p>
 </section>
 
 <section>
@@ -355,12 +355,12 @@ being implicitly passed out of the scope of the global</p>
 <h2><em>So:</em> no constructors</h2>
 <p>A constructor is static (because there isn't yet an object to call a method
 on)</p>
+<p>Conventional constructors and the <code>new</code> keyword are 'considered
+harmful', because they don't obey inheritance rules, and because they expose
+implementation details</p>
+<p>The phrase <code>new Thing()</code> prevents you from returning a
+recycled or shared object, or a subclassed object (hence factory patterns)</p>
 <p>So Runway doesn't have conventional constructors</p>
-<p>But that's OK because conventional constructors and the <code>new</code>
-keyword are 'considered harmful'</p>
-<p>Constructors can't be inherited, and the phrase <code>new Thing()</code>
-exposes some implementation details, preventing you from giving a recycled or
-shared object, or a subclassed object (hence factory patterns)</p>
 </section>
 
 <section>
