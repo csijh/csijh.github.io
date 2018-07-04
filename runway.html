@@ -404,7 +404,18 @@ object</p>
 initialized</p>
 <p><code>set</code> is an ordinary method, but with the <dfn>property</dfn> of
 being a constructor</p>
+<p><a class="jump" href="#paradox">paradox</a></p>
 </section>
+
+<aside id="paradox">
+<h2>Paradox</h2>
+<p>A variable doesn't start out uninitialized, it is initialized to a default
+'uninitialized' object of its type</p>
+<p>But aren't the fields of that object initialized to default objects of their
+types?</p>
+<p>True, except that eventually, as you work your way down, you reach primitive
+fields, which are treated as genuinely uninitialized</p>
+</aside>
 
 <section>
 <h2>Comparison</h2>
