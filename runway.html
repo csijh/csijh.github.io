@@ -255,6 +255,7 @@ languages</p>
 <p>Notes:
 <a class="jump" href="#unions">unions</a>,
 <a class="jump" href="#exceptions">exceptions</a>
+<a class="jump" href="#whole">whole program analysis</a>
 </p>
 </section>
 
@@ -271,12 +272,25 @@ as convenient as an algebraic type in Haskell would be good</p>
 
 <aside id="exceptions">
 <h2>Exceptions</h2>
-<p>The plan is: a method can return an exception value</p>
-<p>Exceptions mix with any other type</p>
-<p>That makes exception behaviour easily testable</p>
-<p>An exception return value not explicitly handled by the end of its block
-becomes an error and is thrown</p>
-<p>The compiler tells you if any errors are uncaught</p>
+<p>Java's exceptions have three problems:</p>
+<ul>
+<li>it is much harder to test exceptional behaviour than normal behaviour</li>
+<li>unchecked exceptions are uncontrolled</li>
+<li>checked exceptions require lots of boilerplate code from the programmer</li>
+</ul>
+<p>Runway fixes these problems by (a) treating exceptions as values and (b)
+checking exception propagation by whole-program analysis</p>
+</aside>
+
+<aside id="whole">
+<h2>Whole program analysis</h2>
+<p>Runway has a convention to support good analysis: whenever a module is
+recompiled, every module that
+depends on it either continues to use the old version or is recompiled</p>
+<p>Compiling is fast enough nowadays that the old 'separate compilation'
+convention is no longer needed</p>
+<p>The worst case of recompilation efficiency would be a large inter-dependent
+group of modules, but that's now regarded as absurdly bad program design</p>
 </aside>
 
 <section>
